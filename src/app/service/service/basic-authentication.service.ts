@@ -1,10 +1,14 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { map } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { baseUrl } from 'src/app/app.constants';
 
 export const TOKEN = 'token'
 export const AUTHENTICATED_USER = 'authenticaterUser'
+
+
+
+
 
 @Injectable({
   providedIn: 'root',
@@ -13,6 +17,22 @@ export class BasicAuthenticationService {
 
   constructor(private http: HttpClient) {}
 
+  executeJWTAuthenticationService(username: string, password: string) {
+    
+
+    return this.http
+      .post<any>(`${baseUrl}/authenticate`,
+      {username,
+      password})
+      .pipe(
+        map((data) => {
+          sessionStorage.setItem(AUTHENTICATED_USER, username);
+          sessionStorage.setItem(TOKEN, `Bearer ${data.token}`);
+
+          return data;
+        })
+      );
+  }
   executeAuthenticationService(username: string, password: string) {
     let basicAuthHeaderString ='Basic ' + window.btoa(username + ':' + password);
 
@@ -25,12 +45,30 @@ export class BasicAuthenticationService {
       .get<AuthenticationBean>(`${baseUrl}/basicauth`,{ headers })
       .pipe(
         map((data) => {
-          sessionStorage.setItem('authenticaterUser', username);
+          sessionStorage.setItem(AUTHENTICATED_USER, username);
           sessionStorage.setItem(TOKEN, basicAuthHeaderString);
 
           return data;
         })
       );
+  }
+  register(username: string, email: string, password: string, role:string[]): Observable<any>{
+    debugger
+    const httpOptions = {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+    };
+  
+    return this.http.post('http://localhost:8080/api/auth/signup',
+    {
+      username,
+      email ,
+      password,
+      role
+
+    },
+    httpOptions
+    );
+
   }
 
   //   authenticate(username:any,password:any){
@@ -44,12 +82,11 @@ export class BasicAuthenticationService {
   //}
 
   isUserLogedIn() {
-    let user = sessionStorage.getItem('authenticaterUser');
+    let user = sessionStorage.getItem(AUTHENTICATED_USER);
     return !(user === null);
   }
 
   getAuthenticatedToken() {
-    debugger
     if (this.getAuthenticatedUser()) 
       return sessionStorage.getItem(TOKEN);
     
@@ -58,10 +95,10 @@ export class BasicAuthenticationService {
   }
 
   getAuthenticatedUser() {
-    return sessionStorage.getItem('authenticaterUser');
+    return sessionStorage.getItem(AUTHENTICATED_USER);
   }
   logout() {
-    sessionStorage.removeItem('authenticaterUser');
+    sessionStorage.removeItem(AUTHENTICATED_USER);
     sessionStorage.removeItem(TOKEN);
   }
 }

@@ -13,6 +13,8 @@ import { LogoutComponent } from './logout/logout.component';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { AddTodoComponent } from './add-todo/add-todo.component';
 import { HttpInterveterBasicAuthService } from './service/data/http-interveter-basic-auth.service';
+import { RegistrationComponent } from './registration/registration.component';
+
 
 @NgModule({
   declarations: [
@@ -24,14 +26,17 @@ import { HttpInterveterBasicAuthService } from './service/data/http-interveter-b
     MenuComponent,
     FooterComponent,
     LogoutComponent,
-    AddTodoComponent
+    AddTodoComponent,
+    RegistrationComponent
     
   ],
   imports: [
+    
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    
     
   ],
   providers: [

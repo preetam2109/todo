@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Todo } from '../todo';
 import { TodoDataService } from '../service/data/todo-data.service';
 import { Route, Router } from '@angular/router';
+import { AUTHENTICATED_USER } from '../service/service/basic-authentication.service';
 
 @Component({
   selector: 'app-list-todos',
@@ -12,6 +13,8 @@ export class ListTodosComponent {
   
   message: string = '';  
   todos: Todo[] | undefined
+  username=sessionStorage.getItem(AUTHENTICATED_USER)
+
   constructor(private route :Router ,private todoService:TodoDataService){
     
   }
@@ -39,7 +42,7 @@ ngOnInit(){
 }
 refreshTodos() {
   try{
-    this.todoService.retrieveAllTodos('Sneha').subscribe(res=>{
+    this.todoService.retrieveAllTodos(`${this.username}`).subscribe(res=>{
       this.todos=res;
     });
 
