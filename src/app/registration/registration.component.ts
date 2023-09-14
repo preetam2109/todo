@@ -1,8 +1,10 @@
 import { Component, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { BasicAuthenticationService } from '../service/service/basic-authentication.service';
 import { NgForm } from '@angular/forms';
 import { ERole } from '../role';
+import { UserDataServiceService } from '../service/data/user-data-service.service';
+import { User } from 'User';
 
 @Component({
   selector: 'app-registration',
@@ -10,6 +12,8 @@ import { ERole } from '../role';
   styleUrls: ['./registration.component.css']
 })
 export class RegistrationComponent {
+  id:number | undefined;
+  user:User | undefined
   @ViewChild('registrationForm') registrationForm!: NgForm; // Reference to the form
   // rolevalue: ERole[] = [];
   // roleValues: string[] = Object.values(ERole).filter(value => typeof value === 'string');
@@ -27,14 +31,31 @@ export class RegistrationComponent {
   isSignUpFailed = false;
   errorMessage = '';
 
-  constructor(private router:Router,private basicAuthenticationService: BasicAuthenticationService ){}
+  constructor(private userDataService:UserDataServiceService,private router:Router,private route:ActivatedRoute,private basicAuthenticationService: BasicAuthenticationService ){}
   ngOnInit(){
-    
+
+    debugger
+    this.id = this.route.snapshot.params['id'];
+
+    if (this.id != -1) {
+      debugger
+      this.userDataService.retrieveUser(this.id)
+        .subscribe(res=>{
+          // alert(JSON.stringify(res))
+           this.user = res
+          //  this.form.id=res.id
+          this.form.username=res.username
+          this.form.email=res.email
+          this.form.role.name=res.roles
+          // this.form.password=res.password
+
+
+        })}
   }
   register(): void {
     debugger
     const { username, email, password,role } = this.form;
-
+   
     this.basicAuthenticationService.register(username, email, password,[role]).subscribe({
       next: data => {
         // debugger
@@ -52,5 +73,6 @@ export class RegistrationComponent {
         this.isSignUpFailed = true;
       }
     });
-  }
+
+}
 }

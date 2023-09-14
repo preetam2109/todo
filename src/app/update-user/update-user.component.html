@@ -1,0 +1,35 @@
+<div>
+    <h2>Edit User</h2>
+    <div class="alert alert-success" *ngIf="isSuccessful">User updated successfully !</div>
+    <form (submit)="updateUser(form)">
+      <div>
+        <label>Username:</label>
+        <input type="text" #username="ngModel" [(ngModel)]="form.username" class="form-control" name="username"
+            required="required">
+      </div>
+      <div>
+        
+        <label>Email:</label>
+        <input type="email" #email="ngModel" [(ngModel)]="form.email" class="form-control" name="email"
+            required="required">
+      </div>
+      <div>
+        <label>Role:</label>
+        <select [(ngModel)]="form.role" class="form-control" name="role" required>
+            <option value="user">user</option>
+            <option value="admin">admin</option>
+            <option value="mod">mod</option>
+
+        </select>
+      </div>
+      <div>
+        <label>Password:</label>
+        <input type="password" #password="ngModel" [(ngModel)]="form.password" class="form-control" name="password"
+            required="required">
+      </div>
+      <div>
+        <button type="submit" class="btn btn-success">Update</button>
+      </div>
+    </form>
+  </div>
+  

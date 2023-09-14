@@ -8,6 +8,8 @@ import { LogoutComponent } from './logout/logout.component';
 import { RouteGuardService } from './service/route-guard.service';
 import { AddTodoComponent } from './add-todo/add-todo.component';
 import { RegistrationComponent } from './registration/registration.component';
+import { UsersComponent } from './users/users.component';
+import { UpdateUserComponent } from './update-user/update-user.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -17,6 +19,12 @@ const routes: Routes = [
   { path: 'logout', component: LogoutComponent,canActivate:[RouteGuardService]},
   { path: 'todos/:id', component: AddTodoComponent,canActivate:[RouteGuardService]},
   { path: 'registration', component: RegistrationComponent},
+  { path: 'users', component: UsersComponent,canActivate:[RouteGuardService]},
+  { path: 'registration/:id', component: RegistrationComponent,canActivate:[RouteGuardService]},
+  { path: 'update/:id', component: UpdateUserComponent,canActivate:[RouteGuardService]},
+
+
+
 
 
   
